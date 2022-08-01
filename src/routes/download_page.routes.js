@@ -4,8 +4,11 @@ const router = require('express').Router();
 
 const File = require('../models/file.models');
 
+// import 'app' from server.js
+const app = require('../server');
 
-router.get('/:uuid', async (res, req) => {
+
+router.get('/:uuid', async (req, res) => {
     // query db
     try {
         const file = await File.findOne({
@@ -14,18 +17,18 @@ router.get('/:uuid', async (res, req) => {
 
         // if file not found
         if(!file) {
-            return res.render('download', { error: '404. File Not Found'});    
+            return app.render(req, res, '/download', { error: '404. File Not Found'});
         }
 
         // if file is found, return download uri along with metadata
-        return res.render('download', {
+        return app.render(req, res, '/download', {
             uuid: file.uuid,
             filename: file.filename,
             size: file.size,
             download_link: `${process.env.SRV_HOST_BASE_URL}/file/download/${file.uuid}`
         });
     } catch(err) {
-        return res.render('download', { error: 'Error.'});
+        return app.render(req, res, '/download', { error: 'Error.'});
     }
 });
 

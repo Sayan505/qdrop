@@ -8,10 +8,11 @@ router.get('/:uuid', async (req, res) => {
 
     // if file is not found
     if(!file) {
-        return res.render('', { error: 'Invalid File.' });
+        return res.render('/download', { error: '404. File Not Found'});
     }
 
     // if file is found
+    const response = await file.save();
     const path = `${__dirname}/../${file.path}`;
     res.download(path);
 });
