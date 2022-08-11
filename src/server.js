@@ -49,10 +49,9 @@ app.prepare().then(() => {
 
 
     // routes:
-    //server.use('/', index_route);
-    server.use('/api/upload', upload_route);      // upload api endpoint
-    server.use('/file', download_page_route);     // download page route
-    server.use('/file/download', download_file_route); // download api endpoint
+    server.use('/api/upload', upload_route);            // upload api endpoint
+    server.use('/file', download_page_route);           // download page route
+    server.use('/file/download', download_file_route);  // download api endpoint
 
 
     server.all('*', (req, res) => {
