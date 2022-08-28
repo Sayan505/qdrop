@@ -15,7 +15,7 @@ const File = require('../models/file.models');
 // config multer:
 
 let storage_path = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, '../STORAGE/'),
+    destination: (req, file, cb) => cb(null, process.env.SRV_HOST_STORAGE_DIR),
     filename: (req, file, cb)    => {
         const uniqueName = `${uuidv4()}${path.extname(file.originalname)}`;
         cb(null, uniqueName);
