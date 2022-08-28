@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 export default function Page({ download_link, og_filename, size }) {
-    return (
+    return(
         <a href={download_link}>{og_filename} {size} Bytes</a>
     ); }
 
