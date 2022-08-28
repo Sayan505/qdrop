@@ -23,9 +23,17 @@ let storage_path = multer.diskStorage({
 });
 
 // 200MiB max
+// Restricted: .exe, .bat, .scr, .ps1
 let upload = multer({
     storage: storage_path,
     limits: { fileSize: 209715200 },
+    fileFilter: function(req, file, callback) {
+        var ext = path.extname(file.originalname);
+        if(ext == '.exe' && ext == '.bat' && ext == '.scr' && ext == '.ps1') {
+            return callback(new Error('Restricted file type'));
+        }
+        callback(null, true);
+    }
 }).single('target_file');
 
 
