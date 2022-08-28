@@ -47,7 +47,8 @@ router.post('/', (req, res) => {
             filename: req.file.filename,
             uuid: uuidv4(),
             path: req.file.path,
-            size: req.file.size
+            size: req.file.size,
+            og_filename: req.file.originalname,
         });
 
         const response = await file.save();

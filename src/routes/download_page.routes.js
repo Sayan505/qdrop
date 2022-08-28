@@ -25,7 +25,8 @@ router.get('/:uuid', async (req, res) => {
             uuid: file.uuid,
             filename: file.filename,
             size: file.size,
-            download_link: `${process.env.SRV_HOST_BASE_URL}/file/download/${file.uuid}`
+            download_link: `${process.env.SRV_HOST_BASE_URL}/file/download/${file.uuid}`,
+            og_filename: file.og_filename,
         });
     } catch(err) {
         return app.render(req, res, '/download', { error: 'Error.'});
