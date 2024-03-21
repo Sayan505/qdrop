@@ -28,5 +28,5 @@ curl -v http://localhost:3000/api/file/83de4ba2-04b5-436d-b679-593c3e90fd05
 	"download_uri": "http://localhost:3000/api/download/83de4ba2-04b5-436d-b679-593c3e90fd05"
 }
 ```
-`"last_download_timestamp" and "total_download_count" are updated accordingly.`
+`"last_download_timestamp" and "total_download_count" are updated accordingly.`  
 `"download_uri" is the file download link.`
