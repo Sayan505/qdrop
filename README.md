@@ -8,7 +8,7 @@ curl -v -F target_file=@'Data.pdf' localhost:3000/api/upload
 #### Example Response:
 ```json
 {
-	"file": "http://localhost:3000/api/file/83de4ba2-04b5-436d-b679-593c3e90fd05"
+	"file_url": "http://localhost:3000/api/file/83de4ba2-04b5-436d-b679-593c3e90fd05"
 }
 ```
 

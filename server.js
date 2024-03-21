@@ -1,22 +1,30 @@
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 
-const express = require("express");
+import express    from "express";
+
+import connect_db from "./config/mongodb.config.js";
+
+// import routes
+import upload_route   from "./routes/upload.route.js";
+import file_route     from "./routes/file.route.js";
+import download_route from "./routes/download.route.js";
 
 
-const app      = express();
-const SRV_PORT = parseInt(process.env.SRV_PORT) || 3000;
-const SRV_DOMAIN = process.env.SRV_DOMAIN || "localhost";
+const app        = express();
+const SRV_PORT   = parseInt(process.env.SRV_PORT) || 3000;
+const SRV_DOMAIN = process.env.SRV_DOMAIN         || "localhost";
 
 
 // connect to db
-require("./config/mongodb.config")();
+connect_db();
 
 
 // define routes
-app.use("/api/status", require('./routes/status.route'));       // query service status
-app.use("/api/upload", require('./routes/upload.route'));       // upload file to the service
-app.use("/api/file", require('./routes/file.route'));           // file query route
-app.use("/api/download", require('./routes/download.route'));   // file download route
+//app.use("/api/status",   status_route);      // query service status
+app.use("/api/upload",   upload_route);      // upload file to the service
+app.use("/api/file",     file_route);        // file query route
+app.use("/api/download", download_route);    // file download route
 
 
 // start server

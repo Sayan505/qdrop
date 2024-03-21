@@ -1,4 +1,4 @@
-const mongoose = require("mongoose")
+import mongoose from "mongoose";
 
 
 const Schema = mongoose.Schema;
@@ -15,4 +15,4 @@ const file_schema = new Schema({
 }); // files are stored at "process.env.STORAGE_BASEPATH/uploaded_filename"
 
 
-module.exports = mongoose.model("File", file_schema, "files");
+export default mongoose.model("File", file_schema, "files");

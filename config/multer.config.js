@@ -1,8 +1,6 @@
-require("dotenv").config();
-
-const multer         = require("multer");
-const { v4: uuidv4 } = require("uuid");
-const path           = require("path");
+import multer from "multer";
+import { v4 as uuidv4 } from "uuid";
+import path from "path";
 
 
 // ref: https://github.com/expressjs/multer/blob/master/README.md#diskstorage
@@ -14,9 +12,9 @@ const multer_storage = multer.diskStorage({
         const str = `${uuidv4()}${path.extname(file.originalname)}`;
         cb(null, str);
     }
-});     // storage space configured!
+});  // storage space configured.
 
-// https://github.com/expressjs/multer/blob/master/README.md#singlefieldname
+// ref: https://github.com/expressjs/multer/blob/master/README.md#singlefieldname
 const upload = multer({
     storage: multer_storage,
     limits: { fileSize: 268435456 /* 256 MiB */ },
@@ -27,7 +25,7 @@ const upload = multer({
         }
         cb(null, true);
     }
-}).single("target_file");   // upload subroutine primed! (uploads the file in "target_file" multipart field)
+}).single("target_file");    // upload subroutine primed (uploads the file in "target_file" multipart field)
 
 
-module.exports = upload;
+export default upload;
