@@ -3,8 +3,10 @@
 ## File Upload (POST):
 #### Example Request:
 ```sh
-curl -v -F target_file=@'Data.pdf' localhost:3000/api/upload
+curl -v -F target_file=@'./Data.pdf' localhost:3000/api/upload
 ```
+`The "/api/upload/" route is rate limited to 2 requests per minute based on IP.`
+
 #### Example Response:
 ```json
 {
@@ -15,7 +17,7 @@ curl -v -F target_file=@'Data.pdf' localhost:3000/api/upload
 ## File Query (GET):
 #### Example Request:
 ```sh
-curl -v http://localhost:3000/api/file/83de4ba2-04b5-436d-b679-593c3e90fd05
+curl -v http://localhost:3000/api/file/83de4ba2-04b5-436d-b679-593c3e90fd05    # the "file_url"
 ```
 #### Example Response:
 ```json
@@ -29,4 +31,4 @@ curl -v http://localhost:3000/api/file/83de4ba2-04b5-436d-b679-593c3e90fd05
 }
 ```
 `"last_download_timestamp" and "total_download_count" are updated accordingly.`  
-`"download_uri" is the file download link.`
+`"download_uri" is the file download link.`  
