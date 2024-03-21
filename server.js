@@ -5,6 +5,7 @@ const express = require("express");
 
 const app      = express();
 const SRV_PORT = parseInt(process.env.SRV_PORT) || 3000;
+const SRV_DOMAIN = process.env.SRV_DOMAIN || "localhost";
 
 
 // connect to db
@@ -19,6 +20,6 @@ app.use("/api/download", require('./routes/download.route'));   // file download
 
 
 // start server
-app.listen(SRV_PORT, () => {
-    console.log(`[server listening on port ${SRV_PORT}]`);
+app.listen(SRV_PORT, SRV_DOMAIN, () => {
+    console.log(`[server listening @ ${SRV_DOMAIN}:${SRV_PORT}]`);
 });
