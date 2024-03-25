@@ -6,7 +6,7 @@ import upload_controller from "../controllers/upload.controller.js";
 
 const router = express.Router();
 
-router.post("/", rate_limit_middleware, upload_controller);
+router.post("/", rate_limit_middleware, upload_controller);    // "/api/upload" route is rate limited by IP
 
 
 export default router;
