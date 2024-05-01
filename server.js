@@ -4,7 +4,7 @@ dotenv.config();
 import express    from "express";
 
 // mongoose adapter
-import connect_db from "./config/mongoose.config.js";
+import db from "./config/mongoose.config.js";
 
 // logger
 import logger            from "./config/pino.config.js";
@@ -22,7 +22,7 @@ const SRV_DOMAIN = process.env.SRV_DOMAIN         || "localhost";
 
 
 // connect to db
-connect_db();
+db.connect_db();
 
 // register request logger middleware
 app.use(logger_middleware);
@@ -35,6 +35,22 @@ app.use("/api/download", download_route);    // file download route
 
 
 // start server
-app.listen(SRV_PORT, SRV_DOMAIN, () => {
+const server = app.listen(SRV_PORT, SRV_DOMAIN, () => {
     logger.info(`[server listening @ ${SRV_DOMAIN}:${SRV_PORT}]`);
+});
+
+
+
+
+// graceful shutdown
+process.on("SIGINT", () => {
+    logger.info("[SIGTERM: gracefully shutting down]");
+    
+    // stop accepting new reqs
+    server.close(() => {
+        logger.info("server closed");
+
+        // disconnect db
+        db.disconnect_db();
+    });
 });
