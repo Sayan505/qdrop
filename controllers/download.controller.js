@@ -17,7 +17,13 @@ async function download_controller(req, res) {
     }
 
     // then, invoke a file download
-    res.status(200).download(`${path.dirname(fileURLToPath(import.meta.url))}../../${process.env.STORAGE_BASEPATH}/${file.uploaded_filename}`, file.og_filename);
+    res.status(200).download(`${path.dirname(fileURLToPath(import.meta.url))}../../${process.env.STORAGE_BASEPATH}/${file.uploaded_filename}`, file.og_filename, (err) => {
+        if(err) {
+            return res.status(500).send({
+                error: "500: Internal Server Error"
+            });
+        }
+    });
 }
 
 
