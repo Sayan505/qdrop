@@ -17,7 +17,7 @@ async function file_controller(req, res) {
         upload_timestamp:        file.upload_timestamp,
         last_download_timestamp: file.last_download_timestamp,
         total_download_count:    file.total_download_count,
-        download_uri:            `${process.env.SRV_DOMAIN}:${process.env.SRV_PORT}/api/download/${file.uuid}`
+        download_uri:            `${process.env.SRV_DOMAIN}:${process.env.SRV_PORT}/api/file/download/${file.uuid}`
     });
 }
 

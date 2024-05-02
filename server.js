@@ -30,13 +30,18 @@ db.connect_db();
 // register request logger middleware
 app.use(logger_middleware);
 
+
+
+
 // define routes
 //app.use("/api/status",    status_route);      // query service status
 app.use("/api/v1/upload", upload_route);      // upload file to the service (v1)
 app.use("/api/v2/upload", upload_route_v2);   // upload file to the service (v2)
 app.use("/api/upload",    upload_route_v2);   // upload file to the service (latest v2)
-app.use("/api/file",      file_route);        // file query route
-app.use("/api/download",  download_route);    // file download route
+
+app.use("/api/file",      file_route);        // file query and /download route
+
+
 
 
 // start server
