@@ -1,7 +1,7 @@
 import express from "express";
 
 import rate_limit_middleware from "../middleware/rate_limiter.middleware.js"
-import upload_controller from "../controllers/upload.controller.js";
+import upload_controller     from "../controllers/upload.controller.js";
 
 
 const router = express.Router();

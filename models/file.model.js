@@ -11,7 +11,8 @@ const file_schema = new Schema({
     total_download_count   : { type: Number, default : 0        },
     og_filename            : { type: String, required: true     },
     uploaded_filename      : { type: String, required: true     },
-    filesize_nbytes        : { type: Number, required: true     }
+    filesize_nbytes        : { type: Number, required: true     },
+    file_expiry_timestamp  : { type: Date  , default : Date.now }
 }); // files are stored at "process.env.STORAGE_BASEPATH/uploaded_filename"
 
 
