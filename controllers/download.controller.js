@@ -1,7 +1,7 @@
-import path from "path";
+import path              from "path";
 import { fileURLToPath } from "url"
 
-import File from "../models/file.model.js";
+import File              from "../models/file.model.js";
 
 
 async function download_controller(req, res) {

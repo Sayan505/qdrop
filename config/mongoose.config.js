@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-import logger from "../config/pino.config.js";
+import logger   from "../config/pino.config.js";
 
 
 // ref: https://mongoosejs.com/docs/connections.html#options

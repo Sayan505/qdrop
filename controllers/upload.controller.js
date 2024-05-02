@@ -1,4 +1,4 @@
-import path from "path";
+import path   from "path";
 
 import upload from "../config/multer.config.js";
 import File   from "../models/file.model.js";
