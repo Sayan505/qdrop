@@ -44,7 +44,7 @@ const server = app.listen(SRV_PORT, SRV_DOMAIN, () => {
 
 // graceful shutdown
 process.on("SIGINT", () => {
-    logger.info("[SIGTERM: gracefully shutting down]");
+    logger.info("[SIGINT: gracefully shutting down]");
     
     // stop accepting new reqs
     server.close(() => {
