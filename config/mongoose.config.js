@@ -8,15 +8,15 @@ import logger   from "../config/pino.config.js";
 function connect_db() {
     logger.info("[trying to connect to db ...]");
 
-    mongoose.connect(process.env.MONGO_CONN_URI, { dbName: "qdrop" }).then(
+    return mongoose.connect(process.env.MONGO_CONN_URI, { dbName: "qdrop" }).then(
         () =>  { logger.info("[connected to db: \"qdrop\"]"); },
         err => { logger.info(`[DB ERROR: ${err}]`);           }
     );
 }
 
-// ref: https://mongoosejs.com/docs/api/mongoose.html#Mongoose.prototype.disconnect()
-function disconnect_db() {
-    mongoose.connection.close().then(
+// ref: https://mongoosejs.com/docs/api/connection.html#Connection.prototype.close()
+function disconnect_db() {    
+    return mongoose.connection.close().then(
         () => { logger.info("[db disconnected]");   },
         err => { logger.info(`[DB ERROR: ${err}]`); }  
     );
@@ -24,3 +24,4 @@ function disconnect_db() {
 
 
 export default { connect_db, disconnect_db };
+export const     mongoose_instance = mongoose;

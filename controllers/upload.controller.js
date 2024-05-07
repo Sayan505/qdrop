@@ -1,7 +1,9 @@
-import path   from "path";
+import path         from "path";
 
-import upload from "../config/multer.config.js";
-import File   from "../models/file.model.js";
+import logger   from "../config/pino.config.js";
+
+import upload       from "../config/multer.config.js";
+import File         from "../models/file.model.js";
 
 
 async function upload_controller(req, res) {
@@ -12,7 +14,7 @@ async function upload_controller(req, res) {
             });
         }
 
-        // craft db  record:
+        // craft db  record
         const file = new File({
             uuid:                    path.parse(req.file.filename).name,
             upload_timestamp:        Date.now(),
@@ -24,8 +26,10 @@ async function upload_controller(req, res) {
             file_expiry_timestamp:   (new Date().setMinutes(new Date().getMinutes() + 30))   // default expiry 30 mins
         });
 
-        // record to db:
+        // record to db
         await file.save();
+
+        logger.info(`[file \"${file.og_filename}\" uploaded as \"${file.uploaded_filename}\"]`);
 
         // return download info
         return res.status(200).send({
