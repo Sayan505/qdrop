@@ -11,24 +11,24 @@ curl -v -F target_file=@'./Data.pdf' -F expire_in='5mins' localhost:3000/api/upl
 #### Example Response:
 ```json
 {
-	"file_url": "localhost:3000/api/file/0e4cb48a-b68a-4f25-a47a-8a2413d03c56"
+	"file_url": "localhost:3000/api/file/00YzBjLWFlZm"
 }
 ```
 
-## File Query (GET):
+## File Query & Download (GET):
 #### Example Request:
 ```sh
-curl -v http://localhost:3000/api/file/0e4cb48a-b68a-4f25-a47a-8a2413d03c56    # the "file_url"
+curl -v http://localhost:3000/api/file/00YzBjLWFlZm    # the "file_url"
 ```
 #### Example Response:
 ```json
 {
   "filename": "Data.pdf",
   "filesize_nbytes": 8026081,
-  "upload_timestamp": "2024-05-20T09:24:15.729Z",
+  "upload_timestamp": "2024-05-20T11:30:34.612Z",
   "last_download_timestamp": null,
   "total_download_count": 0,
-  "download_uri": "localhost:3000/api/file/download/0e4cb48a-b68a-4f25-a47a-8a2413d03c56"
+  "download_uri": "localhost:3000/api/file/download/00YzBjLWFlZm"
 }
 ```
 `"last_download_timestamp" and "total_download_count" are updated accordingly.`  

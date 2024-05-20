@@ -9,10 +9,16 @@ const multer_storage = multer.diskStorage({
         cb(null, process.env.STORAGE_BASEPATH);
     },
     filename: function(req, file, cb) {
-        const str = `${uuidv4()}${path.extname(file.originalname)}`;
+        var   str = Buffer.from(`${uuidv4()}`).toString("base64url");
+        
+        const l   = Math.random() * (parseInt(str.length / 2) - 5);
+        const r   = Math.random() * (parseInt(str.length) - l + 5) + l + 5;
+        
+        str       = str.slice(l, r) + path.extname(file.originalname);
+
         cb(null, str);
     }
-});  // storage space configured.
+});  // storage space configured
 
 // ref: https://github.com/expressjs/multer/blob/master/README.md#singlefieldname
 const upload = multer({
