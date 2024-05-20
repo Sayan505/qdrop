@@ -23,7 +23,7 @@ const multer_storage = multer.diskStorage({
 // ref: https://github.com/expressjs/multer/blob/master/README.md#singlefieldname
 const upload = multer({
     storage: multer_storage,
-    limits: { fileSize: 268435456 /* 256 MiB */ },
+    limits: { fileSize: 536870912 /* 512 MiB */ },
     fileFilter: function(req, file, cb) {
         var mimetype = path.extname(file.mimetype);
         if(mimetype.includes("executable")) {
