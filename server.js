@@ -1,17 +1,20 @@
-import dotenv            from "dotenv";
+import dotenv                from "dotenv";
 dotenv.config();
 
-import express           from "express";
+import express               from "express";
 
-import db                from "./config/mongoose.config.js";
+import db                    from "./config/mongoose.config.js";
 
-import logger            from "./config/pino.config.js";
-import logger_middleware from "./middleware/logger.middleware.js";
+import { CronJob }           from "cron";
+import cleanup_expired_files from "./tasks/cleanup_expired_files.task.js";
+
+import logger                from "./config/pino.config.js";
+import logger_middleware     from "./middleware/logger.middleware.js";
 
 // import routes
-import upload_route      from "./routes/upload.route.js";
-import upload_route_v2   from "./routes/upload.route.v2.js";
-import file_route        from "./routes/file.route.js";
+import upload_route          from "./routes/upload.route.js";
+import upload_route_v2       from "./routes/upload.route.v2.js";
+import file_route            from "./routes/file.route.js";
 
 
 
@@ -34,28 +37,38 @@ app.use("/api/file",      file_route);        // file query and /download route
 
 
 // connect to db
-db.connect_db().then(
-    () => {
+db.connect_db().then(() => {
+    cleanup_expired_files().then(() => {
         // then start server
         const server = app.listen(SRV_PORT, SRV_DOMAIN, () => {
             logger.info(`[server listening @ ${SRV_DOMAIN}:${SRV_PORT}]`);
+        });
+
+        // schedule cleanup every sunday midnight
+        const cleanup_task = CronJob.from({
+            cronTime: "0 0 0 * * 0",
+            onTick: function () {
+                cleanup_expired_files();
+            },
+            start: true
         });
 
         
         // register events for graceful shutdown
         for(let sig of ["SIGINT", "SIGTERM"]) {
             process.on(sig, () => {
-                app.emit("shutdown");
-
                 logger.info(`[${sig}: shutting down]`);
                 
                 // stop accepting new reqs
                 server.close(() => {
-                    logger.info("[server stopped accepting new reqs]");
+                    logger.info("[server stopped accepting new requests]");
+
+                    cleanup_task.stop();
+                    logger.info("[stopped scheduled cleanup task]");
             
                     // then disconnect db
                     db.disconnect_db().then(() => {
-                        logger.info("[server closed]");
+                        logger.info("[===server closed===]");
                         
                         // then exit the node process
                         process.exit();
@@ -63,8 +76,5 @@ db.connect_db().then(
                 });
             });
         }
-    },
-    err => {
-        logger.error(`[ERROR:\n$(err)]`);
-    }
-);
+    });
+});
