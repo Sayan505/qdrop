@@ -3,10 +3,11 @@
 ## File Upload (POST):
 #### Example Request:
 ```sh
-curl -v -F target_file=@'./Data.pdf' -F expire_in='5mins' localhost:3000/api/upload
+curl -v -F target_file=@'./Data.pdf' -F expire_in='5mins' localhost:3000/api/upload    # "multipart/form-data"
 ```
 `The "/api/upload/" route is rate limited to 2 requests per minute based on IP.`  
-`Upload size limit is 256 MiB and limited to "non-executable" file types only.`
+`Upload size limit is 256 MiB and limited to "non-executable" file types only.`  
+`Available values for "expire_in" (optional): "5mins", "30mins", "1hrs", "2hrs", "5hrs", "12hrs", "24hrs"/"1day", "2days" and "7days", else default ("30mins").`
 
 #### Example Response:
 ```json
