@@ -34,33 +34,34 @@ app.use("/api/file",      file_route);        // file query and /download route
 
 
 // connect to db
-db.connect_db();
-
-
-// start server
-const server = app.listen(SRV_PORT, SRV_DOMAIN, () => {
-    logger.info(`[server listening @ ${SRV_DOMAIN}:${SRV_PORT}]`);
-});
-
-
-
-
-// graceful shutdown
-for(let sig of ["SIGINT", "SIGTERM"]) {
-    process.on(sig, () => {
-        logger.info(`[${sig}: shutting down]`);
-        
-        // stop accepting new reqs
-        server.close(() => {
-            logger.info("[server stopped accepting new reqs]");
-    
-            // then disconnect db
-            db.disconnect_db().then(() => {
-                logger.info("[server closed]");
-                
-                // then exit the node process
-                process.exit();
-            });
+db.connect_db().then(
+    () => {
+        // then start server
+        const server = app.listen(SRV_PORT, SRV_DOMAIN, () => {
+            logger.info(`[server listening @ ${SRV_DOMAIN}:${SRV_PORT}]`);
         });
-    });
-}
+
+        
+        // graceful shutdown
+        for(let sig of ["SIGINT", "SIGTERM"]) {
+            process.on(sig, () => {
+                app.emit("shutdown");
+
+                logger.info(`[${sig}: shutting down]`);
+                
+                // stop accepting new reqs
+                server.close(() => {
+                    logger.info("[server stopped accepting new reqs]");
+            
+                    // then disconnect db
+                    db.disconnect_db().then(() => {
+                        logger.info("[server closed]");
+                        
+                        // then exit the node process
+                        process.exit();
+                    });
+                });
+            });
+        }
+    }
+);

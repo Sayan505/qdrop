@@ -1,6 +1,6 @@
 import path         from "path";
 
-import logger   from "../config/pino.config.js";
+import logger       from "../config/pino.config.js";
 
 import upload       from "../config/multer.config.js";
 import File         from "../models/file.model.js";
@@ -14,6 +14,41 @@ async function upload_controller(req, res) {
             });
         }
 
+        var calculated_expiry_timestamp = (new Date().setMinutes(new Date().getMinutes() + 30));    // default expiry 30 mins
+        
+        // available expiry modes: "5mins", "30mins", "1hrs", "2hrs", "5hrs", "12hrs", "24hrs"/"1day", "2days" and "7days", else default
+        switch(req.body.expire_in) {
+            case "5mins":
+                calculated_expiry_timestamp = (new Date().setMinutes(new Date().getMinutes() + 5));
+                break;
+            case "30mins":
+                calculated_expiry_timestamp = (new Date().setMinutes(new Date().getMinutes() + 30));
+                break;
+            case "1hrs":
+                calculated_expiry_timestamp = (new Date().setHours(new Date().getHours()     + 1));
+                break;
+            case "2hrs":
+                calculated_expiry_timestamp = (new Date().setHours(new Date().getHours()     + 2));
+                break;
+            case "5hrs":
+                calculated_expiry_timestamp = (new Date().setHours(new Date().getHours()     + 5));
+                break;
+            case "12hrs":
+                calculated_expiry_timestamp = (new Date().setHours(new Date().getHours()     + 12));
+                break;
+            case "24hrs":  // fallthrough
+            case "1day":
+                calculated_expiry_timestamp = (new Date().setDate(new Date().getDate()       + 1));
+                break;
+            case "2days":
+                calculated_expiry_timestamp = (new Date().setDate(new Date().getDate()       + 2));
+                break;
+            case "7days":
+                calculated_expiry_timestamp = (new Date().setDate(new Date().getDate()       + 7));
+                break;
+            default: break;
+        }
+
         // craft db  record
         const file = new File({
             uuid:                    path.parse(req.file.filename).name,
@@ -23,7 +58,7 @@ async function upload_controller(req, res) {
             og_filename:             req.file.originalname,
             uploaded_filename:       req.file.filename,
             filesize_nbytes:         req.file.size,
-            file_expiry_timestamp:   (new Date().setMinutes(new Date().getMinutes() + 30))   // default expiry 30 mins
+            file_expiry_timestamp:   calculated_expiry_timestamp
         });
 
         // record to db

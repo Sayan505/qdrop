@@ -1,10 +1,10 @@
+import fs                  from "fs";
 import path                from "path";
 import { fileURLToPath }   from "url"
 
-import logger   from "../config/pino.config.js";
+import logger              from "../config/pino.config.js";
 
 import File                from "../models/file.model.js";
-import delete_file_by_uuid from "../util/delete_file_by_uuid.util.js";
 
 
 async function download_controller(req, res) {
@@ -23,10 +23,28 @@ async function download_controller(req, res) {
     }
 
 
+    const alleged_path = `${path.dirname(fileURLToPath(import.meta.url))}/../${process.env.STORAGE_BASEPATH}/${file.uploaded_filename}`;
+
+
     // if the file is found and is expired
     if(Date.now() >= file.file_expiry_timestamp) {
-        // delete file by uuid
-        delete_file_by_uuid(file.uuid);
+        // attempt to delete file
+        if(fs.existsSync(alleged_path)) {
+            fs.promises.unlink(alleged_path).then(
+                () =>  {
+                    // delete db record only if file deletion succeeds
+                    file.deleteOne().then(
+                        logger.info(`[expired file \"${file.uploaded_filename}\" cleaned up]`)
+                    );
+                },
+                err => { logger.info(`[delete error on file \"${file.uploaded_filename}\"]`); }
+            );
+        } else {
+            // file doesn't exist on disk. delete this dangling db record
+            file.deleteOne().then(
+                logger.info(`[dangling db record for expired file \"${file.uploaded_filename}\" cleaned up]`)
+            );
+        }
 
         // and return file doesn't exist
         return res.status(404).send({
@@ -34,8 +52,8 @@ async function download_controller(req, res) {
         });
     }
 
-    // then, invoke a file download
-    res.status(200).download(`${path.dirname(fileURLToPath(import.meta.url))}/../${process.env.STORAGE_BASEPATH}/${file.uploaded_filename}`, file.og_filename, (err) => {
+    // else, invoke a file download
+    res.status(200).download(alleged_path, file.og_filename, (err) => {
         if(err) {
             return res.status(500).send({
                 error: "500: Internal Server Error"
