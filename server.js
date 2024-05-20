@@ -42,7 +42,7 @@ db.connect_db().then(
         });
 
         
-        // graceful shutdown
+        // register events for graceful shutdown
         for(let sig of ["SIGINT", "SIGTERM"]) {
             process.on(sig, () => {
                 app.emit("shutdown");
@@ -63,5 +63,8 @@ db.connect_db().then(
                 });
             });
         }
+    },
+    err => {
+        logger.error(`[ERROR:\n$(err)]`);
     }
 );

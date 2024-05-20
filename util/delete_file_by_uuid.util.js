@@ -21,7 +21,7 @@ async function delete_file_by_uuid(_uuid) {
                 logger.info(`[expired file \"${file.uploaded_filename}\" cleaned up]`)
             );
         },
-        err => { logger.info(`[delete error on file \"${file.uploaded_filename}\"]`);    }
+        err => { logger.error(`[delete error on file \"${file.uploaded_filename}\"]`); }
     );
 }
 

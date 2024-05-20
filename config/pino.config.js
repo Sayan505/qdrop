@@ -1,9 +1,22 @@
-import pino from "pino";
+import pino, { destination } from "pino";
 
 
 const logger = pino({
     transport: {
-        target: "pino-pretty"
+        targets: [
+            {
+                target: "pino-pretty",
+                options: {
+                    destination: 1  // STDOUT
+                }
+            },
+            {
+                target: "pino/file",
+                options: {
+                    destination: "./log.txt"  // file: "log.txt" in project root
+                }
+            }
+        ]
     }
 });
 

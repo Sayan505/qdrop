@@ -37,7 +37,7 @@ async function download_controller(req, res) {
                         logger.info(`[expired file \"${file.uploaded_filename}\" cleaned up]`)
                     );
                 },
-                err => { logger.info(`[delete error on file \"${file.uploaded_filename}\"]`); }
+                err => { logger.error(`[delete error on file \"${file.uploaded_filename}\"]`); }
             );
         } else {
             // file doesn't exist on disk. delete this dangling db record
