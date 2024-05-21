@@ -1,0 +1,2 @@
+// test uuid consistency across the response from upload to the file info query
+// test file name correctness from upload to file info query
