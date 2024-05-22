@@ -2,6 +2,7 @@ import request               from "supertest";
 
 import { tests }             from "../server.js";
 import cleanup_expired_files from "../tasks/cleanup_expired_files.task.js";
+import delete_file_by_uuid   from "../utils/delete_file_by_uuid.util.js";
 
 
 // the express instance
@@ -51,9 +52,20 @@ describe("test expired files cleaning", () => {
         const res_upload_4 = await request(app).post("/api/upload").attach("target_file", "./server.js").field("expire_in", "__0sec__");
         const res_upload_5 = await request(app).post("/api/upload").attach("target_file", "./server.js").field("expire_in", "__0sec__");
 
-        const expired_files_count = await cleanup_expired_files();
+        const res = await cleanup_expired_files();
 
-        expect(expired_files_count).toBe(5);
+        expect(res).toEqual({expired_objects_count: 5, successful_purge_count: 5});
+    });
+});
+
+describe("test delete_file_by_uuid", () => {
+    it("should return 1 (purged)", async () => {
+        const res_upload      = await request(app).post("/api/upload").attach("target_file", "./server.js");
+        const res_upload_uuid = res_upload.body.file_url.split("/").at(-1);
+
+        const res             = await delete_file_by_uuid(res_upload_uuid);
+
+        expect(res).toEqual(1);
     });
 });
 
