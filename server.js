@@ -56,8 +56,8 @@ db.connect_db().then(() => {
         });
 
         
-        // register events for graceful shutdown
-        for(let sig of ["SIGINT", "SIGTERM"]) {
+        // register event listeners for graceful shutdown
+        for(let sig of ["SIGINT", "SIGTERM", "graceful-shutdown"]) {
             process.on(sig, () => {
                 logger.info(`[${sig}: shutting down]`);
                 
@@ -73,7 +73,7 @@ db.connect_db().then(() => {
                         logger.info("[===server closed===]");
                         
                         // then exit the node process
-                        process.exit();
+                        //process.exit();
                     });
                 });
             });

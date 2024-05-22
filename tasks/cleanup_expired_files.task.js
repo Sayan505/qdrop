@@ -32,7 +32,7 @@ async function cleanup_expired_files() {
             } else {
                 // file doesn't exist on disk. delete this dangling db record
                 file.deleteOne().then(() => {
-                    logger.info(`[dangling db record for expired file \"${file.uploaded_filename}\" cleaned up]`)
+                    logger.info(`[dangling db record for expired file \"${file.uploaded_filename}\" cleaned up]`);
                 });
             }
         }
