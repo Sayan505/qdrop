@@ -6,14 +6,16 @@ import logger              from "../config/pino.config.js";
 import File                from "../models/file.model.js";
 
 
-async function cleanup_expired_files(_uuid) {
+async function cleanup_expired_files() {
     logger.info("[running cleanup subroutine]");
 
 
-    var delete_count = 0;
+    var expired_files_count = 0;
     for await (const file of File.find()) {
         // if the file is expired
         if(Date.now() >= file.file_expiry_timestamp) {
+            ++expired_files_count;
+
             const alleged_path = `${path.dirname(fileURLToPath(import.meta.url))}/../${process.env.STORAGE_BASEPATH}/${file.uploaded_filename}`;
 
             // attempt to delete file
@@ -22,8 +24,6 @@ async function cleanup_expired_files(_uuid) {
                     () =>  {
                         // delete db record only if file deletion succeeds
                         file.deleteOne().then(() => {
-                            ++delete_count;
-
                             logger.info(`[expired file \"${file.uploaded_filename}\" cleaned up]`);
                         });
                     },
@@ -32,8 +32,6 @@ async function cleanup_expired_files(_uuid) {
             } else {
                 // file doesn't exist on disk. delete this dangling db record
                 file.deleteOne().then(() => {
-                    ++delete_count;
-
                     logger.info(`[dangling db record for expired file \"${file.uploaded_filename}\" cleaned up]`)
                 });
             }
@@ -41,7 +39,12 @@ async function cleanup_expired_files(_uuid) {
     }
     
     
-    logger.info(`[cleanup subroutine over: deleted ${delete_count} objects this time.]`);
+    logger.info(`[cleanup subroutine invoked cleanup for ${expired_files_count} objects this time.]`);
+
+
+    if(process.env.NODE_ENV === "test") {
+        return expired_files_count;    // await for this in tests
+    }
 }
 
 

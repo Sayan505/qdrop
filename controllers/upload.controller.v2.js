@@ -18,8 +18,8 @@ async function upload_controller(req, res) {
         
         // available expiry modes: "5mins", "30mins", "1hrs", "2hrs", "5hrs", "12hrs", "24hrs"/"1day", "2days" and "7days", else default
         switch(req.body.expire_in) {
-            case "__testcase_0sec__":
-                if(process.env.NODE_ENV === "test") {
+            case "__0sec__":
+                if(process.env.NODE_ENV === "test" || process.env.NODE_ENV === "dev") {
                     calculated_expiry_timestamp = Date.now();
                     break;
                 } else { break; }
