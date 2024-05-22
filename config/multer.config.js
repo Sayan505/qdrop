@@ -23,10 +23,12 @@ const multer_storage = multer.diskStorage({
 // ref: https://github.com/expressjs/multer/blob/master/README.md#singlefieldname
 const upload = multer({
     storage: multer_storage,
-    limits: { fileSize: 536870912 /* 512 MiB */ },
+    limits: { fileSize: 536870912  /* 512 MiB */ },
     fileFilter: function(req, file, cb) {
-        var mimetype = path.extname(file.mimetype);
-        if(mimetype.includes("executable")) {
+        const restricted_exts = [".exe", ".bat", ".com", ".cmd", ".scr", ".vbs", ".sh", ".run", ".appimage", ".flatpakref", ".rpm", ".deb", ".apk"];  // exts in lowercase
+        const req_file_ext = path.extname(file.originalname).toLowerCase();
+        
+        if(restricted_exts.includes(req_file_ext)) {
             return cb(new Error("restricted file type"));
         }
         cb(null, true);
