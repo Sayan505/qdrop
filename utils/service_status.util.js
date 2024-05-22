@@ -3,7 +3,8 @@ import { mongoose_instance } from "../config/mongoose.config.js";
 
 var service_status = {
     database: "offline",
-    server: "offline"
+    server: "offline",
+    cleanup: "scheduled"
 };
 
 
@@ -12,6 +13,14 @@ async function init() {
     
     process.on("server-ready", () => {
         service_status.server = "online";
+    });
+
+    process.on("cleanup-ongoing", () => {
+        service_status.cleanup = "ongoing";
+    });
+
+    process.on("cleanup-ended", () => {
+        service_status.cleanup = "scheduled";
     });
 
 
