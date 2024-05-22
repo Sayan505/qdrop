@@ -9,7 +9,7 @@ import { CronJob }           from "cron";
 import cleanup_expired_files from "./tasks/cleanup_expired_files.task.js";
 
 import cors                  from "cors";
-import logger                from "./config/pino.config.js";
+import logger                from "./utils/logger.util.js";
 import logger_middleware     from "./middleware/logger.middleware.js";
 
 // import routes
