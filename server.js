@@ -12,6 +12,8 @@ import cors                  from "cors";
 import logger                from "./utils/logger.util.js";
 import logger_middleware     from "./middleware/logger.middleware.js";
 
+import { init_status_monitor } from "./utils/service_status.util.js";
+
 // import routes
 import status_route          from "./routes/status.route.js";
 import upload_route          from "./routes/upload.route.js";
@@ -20,6 +22,8 @@ import file_route            from "./routes/file.route.js";
 
 
 
+
+init_status_monitor();
 
 const app        = express();
 const SRV_PORT   = parseInt(process.env.SRV_PORT) || 3000;
