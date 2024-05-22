@@ -8,18 +8,18 @@ import cleanup_expired_files from "../tasks/cleanup_expired_files.task.js";
 const app = tests.app;
 
 
-// wait for server to init
+// wait for server to init completely
 // waits for "server-ready" event to fire
 beforeAll(() => {
     return new Promise((resolve) => {
-        app.on("server-ready", async () => {
+        process.on("server-ready", async () => {
             resolve();
         });
     });
 });
 
 afterAll(() => {
-    //process.emit("graceful-shutdown");
+    process.emit("graceful-shutdown");
 });
 
 

@@ -1,7 +1,4 @@
-import pino, { destination } from "pino";
-
-
-const logger = pino({
+const pino_config = {
     transport: {
         targets: [
             {
@@ -18,7 +15,7 @@ const logger = pino({
             }
         ]
     }
-});
+};
 
 
-export default logger;
+export default pino_config;

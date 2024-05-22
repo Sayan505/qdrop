@@ -1,4 +1,4 @@
-import logger from "../config/pino.config.js"
+import logger from "../utils/logger.util.js";
 
 
 function logger_middleware(req, res, next) {

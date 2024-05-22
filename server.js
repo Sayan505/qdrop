@@ -46,7 +46,7 @@ db.connect_db().then(() => {
     cleanup_expired_files().then(() => {
         // then start server
         const server = app.listen(SRV_PORT, SRV_DOMAIN, () => {
-            app.emit("server-ready");
+            process.emit("server-ready");
             logger.info(`[server listening @ ${SRV_DOMAIN}:${SRV_PORT}]`);
         });
 

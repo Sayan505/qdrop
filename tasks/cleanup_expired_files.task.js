@@ -2,7 +2,7 @@ import fs                  from "fs";
 import path                from "path";
 import { fileURLToPath }   from "url"
 
-import logger              from "../config/pino.config.js";
+import logger              from "../utils/logger.util.js";
 import File                from "../models/file.model.js";
 
 

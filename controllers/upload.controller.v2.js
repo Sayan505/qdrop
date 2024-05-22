@@ -1,6 +1,6 @@
 import path         from "path";
 
-import logger       from "../config/pino.config.js";
+import logger       from "../utils/logger.util.js";
 
 import upload       from "../config/multer.config.js";
 import File         from "../models/file.model.js";
