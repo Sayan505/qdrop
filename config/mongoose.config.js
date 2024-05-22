@@ -10,18 +10,18 @@ function connect_db() {
 
     return mongoose.connect(process.env.MONGO_CONN_URI, { dbName: "qdrop" }).then(
         ()  => {
-            process.emit("db-ready");
             logger.info("[connected to db: \"qdrop\"]");
         },
-        err => { logger.error(`[DB ERROR: ${err}]`);          }
+        err => { logger.error(`[DB ERROR: ${err}]`); }
     );
 }
 
 // ref: https://mongoosejs.com/docs/api/connection.html#Connection.prototype.close()
-function disconnect_db() {    
+function disconnect_db() {
+    logger.info("[db disconnecting ...]");
+
     return mongoose.connection.close().then(
         ()  => {
-            process.emit("db-disconnect");
             logger.info("[db disconnected]");
         },
         err => { logger.error(`[DB ERROR: ${err}]`); }
@@ -30,4 +30,4 @@ function disconnect_db() {
 
 
 export default { connect_db, disconnect_db };
-export const     mongoose_instance = mongoose;
+export const mongoose_instance = mongoose;
