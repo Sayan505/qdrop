@@ -2,7 +2,7 @@ import fs                  from "fs";
 import path                from "path";
 import { fileURLToPath }   from "url"
 
-import logger              from "../config/pino.config.js";
+import logger              from "../utils/logger.util.js";
 import File                from "../models/file.model.js";
 
 
@@ -21,20 +21,17 @@ async function delete_file_by_uuid(__uuid) {
 
     // attempt to delete file
     if(fs.existsSync(alleged_path)) {
-        fs.promises.unlink(alleged_path).then(
-            () =>  {
-                // delete db record only if file deletion succeeds
-                file.deleteOne().then(() => {
-                    logger.info(`[file \"${file.uploaded_filename}\" having uuid \"${__uuid}\" cleaned up]`);
-                });
-            },
-            err => { logger.error(`[delete error on file \"${file.uploaded_filename}\" having uuid \"${__uuid}\"]`); }
-        );
+        try {
+            fs.unlinkSync(alleged_path);
+            await file.deleteOne();
+            logger.info(`[file \"${file.uploaded_filename}\" having uuid \"${__uuid}\" cleaned up]`);
+        } catch(err) {
+            logger.error(`[delete error on file \"${file.uploaded_filename}\" having uuid \"${__uuid}\"]`);
+        }
     } else {
         // file doesn't exist on disk. delete this dangling db record
-        file.deleteOne().then(() => {
-            logger.info(`[dangling db record for file \"${file.uploaded_filename}\" having uuid \"${__uuid}\" cleaned up]`);
-        });
+        await file.deleteOne();
+        logger.info(`[dangling db record for file \"${file.uploaded_filename}\" having uuid \"${__uuid}\" cleaned up]`);
     }
 }
 
