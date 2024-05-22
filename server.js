@@ -8,6 +8,7 @@ import db                    from "./config/mongoose.config.js";
 import { CronJob }           from "cron";
 import cleanup_expired_files from "./tasks/cleanup_expired_files.task.js";
 
+import cors                  from "cors";
 import logger                from "./config/pino.config.js";
 import logger_middleware     from "./middleware/logger.middleware.js";
 
@@ -24,6 +25,9 @@ const app        = express();
 const SRV_PORT   = parseInt(process.env.SRV_PORT) || 3000;
 const SRV_DOMAIN = process.env.SRV_DOMAIN         || "localhost";
 
+
+// register CORS middleware
+app.use(cors());
 
 // register request logger middleware
 app.use(logger_middleware);
