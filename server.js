@@ -49,9 +49,9 @@ app.use("/api/file",      file_route);        // file query and /download route
 db.connect_db().then(() => {
     cleanup_expired_files().then(() => {
         // then start server
-        const server = app.listen(SRV_PORT, SRV_DOMAIN, () => {
+        const server = app.listen(SRV_PORT, () => {
             process.emit("server-ready");
-            logger.info(`[server listening @ ${SRV_DOMAIN}:${SRV_PORT}]`);
+            logger.info(`[server listening @ port ${SRV_PORT}]`);
         });
 
         // schedule cleanup every sunday midnight
