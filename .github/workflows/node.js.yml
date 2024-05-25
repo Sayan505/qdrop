@@ -3,13 +3,12 @@ name: Node.js CI
 on:
   push:
     branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+    environment: testing
 
     strategy:
       matrix:
@@ -17,10 +16,23 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm ci
-    - run: npm test
+    
+    - name: Create .env File
+      run: |
+        touch .env
+        echo SRV_PORT=${{ vars.SRV_PORT }}                 >> .env
+        echo SRV_DOMAIN=${{ vars.SRV_DOMAIN }}             >> .env
+        echo STORAGE_BASEPATH=${{ vars.STORAGE_BASEPATH }} >> .env
+        echo MONGO_CONN_URI=${{ secrets.MONGO_CONN_URI }}  >> .env
+
+    - name: Install Dependencies
+      run: npm ci
+    
+    - name: Run Tests
+      run: npm test
