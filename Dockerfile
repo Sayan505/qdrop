@@ -1,6 +1,6 @@
 FROM node:slim
 
-WORKDIR /opt/qdrop
+WORKDIR /opt/qdrop/app
 COPY . .
 
 RUN npm install

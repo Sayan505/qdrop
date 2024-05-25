@@ -1,0 +1,9 @@
+services:
+  backend:
+    build:
+      dockerfile: Dockerfile
+      context: '.'
+    ports:
+    - ${SRV_PORT}:${SRV_PORT}
+    volumes:
+      - ${STORAGE_BASEPATH}:/opt/qdrop/app/${STORAGE_BASEPATH}
