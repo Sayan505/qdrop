@@ -65,7 +65,7 @@ function rig_cleanup_task() {
 }
 
 function graceful_shutdown(server, cleanup_task, db) {
-    logger.info(`[${sig}: shutting down]`);
+    logger.info(`[=== server shutting down ===]`);
                 
     // stop accepting new reqs
     server.close(() => {
@@ -76,7 +76,7 @@ function graceful_shutdown(server, cleanup_task, db) {
 
         // then disconnect db
         db.disconnect_db().then(() => {
-            logger.info("[===server closed===]");
+            logger.info("[=== server closed ===]");
             
             // then exit the node process
             //process.exit();
